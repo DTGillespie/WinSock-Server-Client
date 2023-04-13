@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   server = accept(listeningSocket, 
                   NULL,   // Optional, address of a SOCKADDR_IN struct
                   NULL);  // Optional, address of variable containing sizeof(struct SOCKADDR_IN)
-  
+
   if (server == INVALID_SOCKET) {
 
     nret = WSAGetLastError();
