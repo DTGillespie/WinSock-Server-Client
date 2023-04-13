@@ -1,5 +1,3 @@
-// gcc client.c -o client.exe -lws2_32
-
 #include <windows.h>
 #include <winsock.h>
 #include <stdio.h>
@@ -133,3 +131,5 @@ void ErrorPrompt(int errorCode, const char *func) {
 
   MessageBox(NULL, errorMsg, "socketIndication", MB_OK);
 }
+
+// gcc client.c -o client.exe -lws2_32

@@ -1,6 +1,3 @@
-// http://johnnie.jerrata.com/winsocktutorial/
-// gcc server.c -o server.exe -lws2_32
-
 #include <windows.h>
 #include <winsock.h>
 #include <stdio.h>
@@ -127,3 +124,6 @@ void ErrorPrompt(int errorCode, const char *func) {
 
   MessageBox(NULL, errorMsg, "socketIndication_Server", MB_OK);
 }
+
+// http://johnnie.jerrata.com/winsocktutorial/
+// gcc server.c -o server.exe -lws2_32
