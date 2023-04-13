@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   /* Host by address example */
 
   IN_ADDR iaHost;
-  iaHost.s_addr = inet_addr("192.168.85.99");
+  iaHost.s_addr = inet_addr("127.0.0.1");
 
   hostEntry = gethostbyaddr((const char *) &iaHost, 
                             sizeof(struct in_addr), 

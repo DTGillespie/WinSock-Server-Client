@@ -19,8 +19,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 
   SOCKET listeningSocket;
   listeningSocket = socket(AF_INET, 
-                          SOCK_STREAM, 
-                          IPPROTO_TCP);
+                           SOCK_STREAM, 
+                           IPPROTO_TCP);
   
   if (listeningSocket == INVALID_SOCKET) {
 
@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 
   SOCKADDR_IN serverInfo;
   serverInfo.sin_family      = AF_INET;
-  serverInfo.sin_addr.s_addr = inet_addr("192.168.85.99");
+  serverInfo.sin_addr.s_addr = inet_addr("127.0.0.1");
   serverInfo.sin_port        = htons(16162); //htons() translates an unsigned short integer into network byte order.
                                              //https://www.ibm.com/docs/ja/zvm/7.2?topic=domains-network-byte-order-host-byte-order
 
