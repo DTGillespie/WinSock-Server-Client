@@ -1,12 +1,12 @@
 #include <windows.h>
 #include <winsock.h>
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #define NETWORK_ERROR -1
 #define NETWORK_OK     0
 
-void ErrorPrompt(int, const char *);
+void LogError(int, const char *);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow) {
 
@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (!hostEntry) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "gethostname()");
+    LogError(nret, "gethostname()");
 
     WSACleanup();
     return NETWORK_ERROR;
@@ -47,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (client == INVALID_SOCKET) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "socket()");
+    LogError(nret, "socket()");
 
     WSACleanup();
     return NETWORK_ERROR;
@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (nret == SOCKET_ERROR) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "connect()");
+    LogError(nret, "connect()");
 
     WSACleanup();
     return NETWORK_ERROR;
@@ -106,7 +106,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
     if (nret == SOCKET_ERROR) {
 
       nret = WSAGetLastError();
-      ErrorPrompt(nret, "send()");
+      LogError(nret, "send()");
 
       WSACleanup();
       return SOCKET_ERROR;
@@ -121,7 +121,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   //WSACleanup(); 
 }
 
-void ErrorPrompt(int errorCode, const char *func) {
+void LogError(int errorCode, const char *func) {
   
   char errorMsg[92];
 

@@ -6,9 +6,9 @@
 #define NETWORK_OK     0
 
 int  MessageEventListener();
-void ErrorPrompt(int, const char *);
+void LogError(int, const char *);
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow) {
+int main() {
 
   WORD sockVersion;
   WSADATA wsaData;
@@ -25,24 +25,27 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (listeningSocket == INVALID_SOCKET) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "socket()");
+    LogError(nret, "socket()");
 
     WSACleanup();
     return NETWORK_ERROR;
   }
 
   SOCKADDR_IN serverInfo;
+
   serverInfo.sin_family      = AF_INET;
-  serverInfo.sin_addr.s_addr = inet_addr("127.0.0.1");
-  serverInfo.sin_port        = htons(16162); //htons() translates an unsigned short integer into network byte order.
-                                             //https://www.ibm.com/docs/ja/zvm/7.2?topic=domains-network-byte-order-host-byte-order
+
+  serverInfo.sin_addr.s_addr = inet_addr("127.0.0.1");  // INADDR_ANY | inet_addr("127.0.0.1") | htonl(INADDR_LOOPBACK);
+
+  serverInfo.sin_port        = htons(16162);            // htons() translates an unsigned short integer into network byte order.
+                                                        // https://www.ibm.com/docs/ja/zvm/7.2?topic=domains-network-byte-order-host-byte-order
 
   nret = bind(listeningSocket, (LPSOCKADDR) &serverInfo, sizeof(struct sockaddr));
 
   if (nret == SOCKET_ERROR) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "bind()");
+    LogError(nret, "bind()");
 
     WSACleanup();
     return NETWORK_ERROR;
@@ -53,14 +56,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (nret == SOCKET_ERROR) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "listen()");
+    LogError(nret, "listen()");
 
     WSACleanup();
     return NETWORK_ERROR;
 
-  } else {
-    printf("\nServer listening on port: %hu", serverInfo.sin_port);
   }
+  
+  printf("Server listening on port: %hu\n", serverInfo.sin_port);
 
   SOCKET server;
   server = accept(listeningSocket, 
@@ -70,10 +73,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   if (server == INVALID_SOCKET) {
 
     nret = WSAGetLastError();
-    ErrorPrompt(nret, "accept()");
+    LogError(nret, "accept()");
 
     WSACleanup();
-    return INVALID_SOCKET;
+    return (int) INVALID_SOCKET;
   } 
   
   int status = MessageEventListener(&nret, &server);
@@ -103,7 +106,7 @@ int MessageEventListener(int *nret, SOCKET *server) {
   if (*nret == SOCKET_ERROR) {
 
     *nret = WSAGetLastError();
-    ErrorPrompt(*nret, "recv()");
+    LogError(*nret, "recv()");
 
     WSACleanup();
     return SOCKET_ERROR;
@@ -114,14 +117,8 @@ int MessageEventListener(int *nret, SOCKET *server) {
   }
 }
 
-void ErrorPrompt(int errorCode, const char *func) {
-
-  char errorMsg[92];
-
-  ZeroMemory(errorMsg, 92);
-  sprintf(errorMsg, "Call to %s returned error %d", (char *)func, errorCode);
-
-  MessageBox(NULL, errorMsg, "socketIndication_Server", MB_OK);
+void LogError(int errorCode, const char *func) {
+  printf("Call to %s returned error %d", (char *)func, errorCode);
 }
 
 // http://johnnie.jerrata.com/winsocktutorial/
