@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
   serverInfo.sin_port        = htons(16162); //htons() translates an unsigned short integer into network byte order.
                                              //https://www.ibm.com/docs/ja/zvm/7.2?topic=domains-network-byte-order-host-byte-order
 
-  nret = bind(listeningSocket, (LPSOCKADDR)&serverInfo, sizeof(struct sockaddr));
+  nret = bind(listeningSocket, (LPSOCKADDR) &serverInfo, sizeof(struct sockaddr));
 
   if (nret == SOCKET_ERROR) {
 
@@ -112,7 +112,6 @@ int MessageEventListener(int *nret, SOCKET *server) {
     printf("\nReceived message: %s\r", h_str_buffer);
     MessageEventListener(nret, server);
   }
-
 }
 
 void ErrorPrompt(int errorCode, const char *func) {
